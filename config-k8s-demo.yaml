@@ -1,0 +1,57 @@
+# If you intened to deploy Kubernetes in an air-gapped environment,
+# please consult the documentation on how to configure custom RKE images.
+nodes:
+#Masters
+- address: 192.168.1.91
+  port: "22"
+  role:
+  - controlplane
+  - etcd
+  user: vagrant
+  docker_socket: /var/run/docker.sock
+  ssh_key_path: /Users/christian/.ssh/id_rsa
+
+#Workers
+- address: 192.168.1.110
+  port: "22"
+  role:
+  - worker
+  user: vagrant
+  docker_socket: /var/run/docker.sock
+  ssh_key_path: /Users/christian/.ssh/id_rsa
+
+
+network:
+  plugin: calico
+  options: {}
+authentication:
+  strategy: x509
+  options: {}
+  sans: []
+ssh_key_path: /Users/christian/.ssh/id_rsa
+ssh_agent_auth: false
+authorization:
+  mode: rbac
+  options: {}
+ignore_docker_version: false
+services:
+  kube-api:
+    extra_args:
+      requestheader-client-ca-file: "/etc/kubernetes/ssl/kube-ca.pem"
+      requestheader-extra-headers-prefix: "X-Remote-Extra-"
+      requestheader-group-headers: "X-Remote-Group"
+      requestheader-username-headers: "X-Remote-User"
+      proxy-client-cert-file: "/etc/kubernetes/ssl/kube-proxy.pem"
+      proxy-client-key-file: "/etc/kubernetes/ssl/kube-proxy-key.pem"
+  kube-controller:
+    extra_args: { "cluster-signing-cert-file": "/etc/kubernetes/ssl/kube-ca.pem", "cluster-signing-key-file": "/etc/kubernetes/ssl/kube-ca-key.pem" }
+  kubelet:
+    # Fail if swap is on
+    fail_swap_on: false
+    # Set max pods to 250 instead of default 110
+    extra_args:
+      max-pods: 250
+ingress:
+    provider: nginx
+    extra_args:
+      enable-ssl-passthrough: ""

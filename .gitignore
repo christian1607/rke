@@ -1,0 +1,5 @@
+/.vagrant/*
+config-fp.yaml
+config-k8s-demo.rkestate
+kube_config_config-k8s-demo.yaml
+rke
