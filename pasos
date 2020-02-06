@@ -1,2 +1,5 @@
 #En el host donde se instala RKE
 ssh-copy-id -i /Users/christian/.ssh/id_rsa  vagrant@192.168.1.110
+
+chmod +x rke
+./rke up --config  config-k8s-demo.yaml  
