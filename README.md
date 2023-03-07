@@ -10,7 +10,7 @@ ssh-copy-id -i /Users/christian/.ssh/id_rsa  vagrant@192.168.1.110
 Modificamos a ejecucion:
 
 
-chmod +x rke
+chmod +x rke 
 
 
 Levantamos el cluster:
